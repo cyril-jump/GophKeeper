@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	UpdateBlobDataByID(ctx context.Context, userID int, data domain.BlobData) error
+	UpdateBlobDataByID(ctx context.Context, userID string, data domain.BlobData) error
 }
 
-func (r *Repo) UpdateBlobDataByIDDB(ctx context.Context, userID int, data domain.BlobData) error {
+func (r *Repo) UpdateBlobDataByIDDB(ctx context.Context, userID string, data domain.BlobData) error {
 
 	return r.provider.UpdateBlobDataByID(ctx, userID, data)
 }

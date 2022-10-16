@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	CreateNewBlobData(ctx context.Context, userID int, data domain.BlobData) error
+	CreateNewBlobData(ctx context.Context, userID string, data domain.BlobData) error
 }
 
-func (r *Repo) CreateNewBlobDataDB(ctx context.Context, userID int, data domain.BlobData) error {
+func (r *Repo) CreateNewBlobDataDB(ctx context.Context, userID string, data domain.BlobData) error {
 
 	return r.provider.CreateNewBlobData(ctx, userID, data)
 }

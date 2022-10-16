@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	CreateNewTextData(ctx context.Context, userID int, data domain.TextData) error
+	CreateNewTextData(ctx context.Context, userID string, data domain.TextData) error
 }
 
-func (r *Repo) CreateNewTextDataDB(ctx context.Context, userID int, data domain.TextData) error {
+func (r *Repo) CreateNewTextDataDB(ctx context.Context, userID string, data domain.TextData) error {
 
 	return r.provider.CreateNewTextData(ctx, userID, data)
 }

@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	GetAllCredData(ctx context.Context, userID int) ([]domain.CredData, error)
+	GetAllCredData(ctx context.Context, userID string) ([]domain.CredData, error)
 }
 
-func (r *Repo) GetAllCredDataDB(ctx context.Context, userID int) ([]domain.CredData, error) {
+func (r *Repo) GetAllCredDataDB(ctx context.Context, userID string) ([]domain.CredData, error) {
 
 	return r.provider.GetAllCredData(ctx, userID)
 }

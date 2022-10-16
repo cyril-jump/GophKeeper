@@ -55,6 +55,11 @@ func RegisterHandlers(router EchoRouter, si ServerInterface) {
 	RegisterHandlersWithBaseURL(router, si, "")
 }
 
+// RegisterStrictHandlers adds each server route to the EchoRouter.
+func RegisterStrictHandlers(router EchoRouter, si ServerInterface) {
+	RegisterStrictHandlersWithBaseURL(router, si, "")
+}
+
 // CreateNewBlobData converts echo context to params.
 func (w *ServerInterfaceWrapper) CreateNewBlobData(ctx echo.Context) error {
 	var err error
@@ -181,16 +186,14 @@ func (w *ServerInterfaceWrapper) Register(ctx echo.Context) error {
 	return err
 }
 
-// RegisterHandlersWithBaseURL and prepends BaseURL to the paths, so that the paths
+// RegisterStrictHandlersWithBaseURL and prepends BaseURL to the paths, so that the paths
 // can be served under a prefix.
-func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL string) {
+func RegisterStrictHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL string) {
 
 	wrapper := ServerInterfaceWrapper{
 		Handler: si,
 	}
 
-	router.POST(baseURL+"/api/login", wrapper.Login)
-	router.POST(baseURL+"/api/register", wrapper.Register)
 	router.POST(baseURL+"/api/materials/blob", wrapper.CreateNewBlobData)
 	router.POST(baseURL+"/api/materials/card", wrapper.CreateNewCardData)
 	router.POST(baseURL+"/api/materials/cred", wrapper.CreateNewCredData)
@@ -203,5 +206,18 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/api/materials/card", wrapper.UpdateCardDataByID)
 	router.PUT(baseURL+"/api/materials/cred", wrapper.UpdateCredDataByID)
 	router.PUT(baseURL+"/api/materials/text", wrapper.UpdateTextDataByID)
+
+}
+
+// RegisterHandlersWithBaseURL and prepends BaseURL to the paths, so that the paths
+// can be served under a prefix.
+func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL string) {
+
+	wrapper := ServerInterfaceWrapper{
+		Handler: si,
+	}
+
+	router.POST(baseURL+"/api/login", wrapper.Login)
+	router.POST(baseURL+"/api/register", wrapper.Register)
 
 }

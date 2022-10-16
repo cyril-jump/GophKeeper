@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	GetAllCardData(ctx context.Context, userID int) ([]domain.CardData, error)
+	GetAllCardData(ctx context.Context, userID string) ([]domain.CardData, error)
 }
 
-func (r *Repo) GetAllCardData(ctx context.Context, userID int) ([]domain.CardData, error) {
+func (r *Repo) GetAllCardDataDB(ctx context.Context, userID string) ([]domain.CardData, error) {
 
 	return r.provider.GetAllCardData(ctx, userID)
 }

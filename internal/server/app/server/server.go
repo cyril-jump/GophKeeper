@@ -1,6 +1,8 @@
 package server
 
 import (
+	"context"
+
 	"github.com/labstack/echo/v4"
 
 	"github.com/cyril-jump/gophkeeper/internal/server/app/api"
@@ -18,24 +20,29 @@ import (
 	updatecarddatabyid "github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-card-data-by-id"
 	updatecreddatabyid "github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-cred-data-by-id"
 	updatetextdatabyid "github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-text-data-by-id"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/middlewares/cookie"
+	"github.com/cyril-jump/gophkeeper/internal/server/pkg/auth"
+	"github.com/cyril-jump/gophkeeper/internal/server/pkg/provider"
 )
 
-func Init() *echo.Echo {
+func Init(ctx context.Context, provider provider.Provider, auth auth.Strict) *echo.Echo {
 
-	createNewBlobDataReqs := createnewblobdata.Setup()
-	createNewCardDataReqs := createnewcarddata.Setup()
-	createNewCredDataReqs := createnewcreddata.Setup()
-	createNewTextDataReqs := createnewtextdata.Setup()
-	getAllBlobDataReqs := getallblobdata.Setup()
-	getAllCardDataReqs := getallcarddata.Setup()
-	getAllCredDataReqs := getallcreddata.Setup()
-	getAllTextDataReqs := getalltextdata.Setup()
-	updateBlobDataByIDReqs := updateblobdatabyid.Setup()
-	updateCardDataByIDReqs := updatecarddatabyid.Setup()
-	updateCredDataByIDReqs := updatecreddatabyid.Setup()
-	updateTextDataByIDReqs := updatetextdatabyid.Setup()
-	loginReqs := login.Setup()
-	registerReqs := register.Setup()
+	cookieMW := cookie.New(auth)
+
+	createNewBlobDataReqs := createnewblobdata.Setup(ctx, provider)
+	createNewCardDataReqs := createnewcarddata.Setup(ctx, provider)
+	createNewCredDataReqs := createnewcreddata.Setup(ctx, provider)
+	createNewTextDataReqs := createnewtextdata.Setup(ctx, provider)
+	getAllBlobDataReqs := getallblobdata.Setup(ctx, provider)
+	getAllCardDataReqs := getallcarddata.Setup(ctx, provider)
+	getAllCredDataReqs := getallcreddata.Setup(ctx, provider)
+	getAllTextDataReqs := getalltextdata.Setup(ctx, provider)
+	updateBlobDataByIDReqs := updateblobdatabyid.Setup(ctx, provider)
+	updateCardDataByIDReqs := updatecarddatabyid.Setup(ctx, provider)
+	updateCredDataByIDReqs := updatecreddatabyid.Setup(ctx, provider)
+	updateTextDataByIDReqs := updatetextdatabyid.Setup(ctx, provider)
+	loginReqs := login.Setup(ctx, provider, auth)
+	registerReqs := register.Setup(ctx, provider, auth)
 
 	requests := joinRequests(
 		createNewBlobDataReqs,
@@ -56,9 +63,13 @@ func Init() *echo.Echo {
 
 	e := echo.New()
 
-	g := e.Group("")
+	group := e.Group("")
 
-	api.RegisterHandlers(g, requests)
+	strictGroup := e.Group("")
+	strictGroup.Use(cookieMW.SessionWithCookies)
+
+	api.RegisterHandlers(group, requests)
+	api.RegisterStrictHandlers(strictGroup, requests)
 
 	return e
 

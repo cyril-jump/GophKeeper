@@ -32,37 +32,32 @@ func (p *Provider) Close() error {
 
 func createTable(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS users (
-		id serial primary key,
+		id text primary key,
 		login text not null unique,
 		password text not null
     );
-    CREATE TABLE IF NOT EXISTS sessions (
-    	refresh_token text primary key unique,
-		user_id int not null references users(id),
-		expired_at timestamp
-    );
 	CREATE TABLE IF NOT EXISTS auth_data (
 		id serial primary key,
-		user_id int not null references users(id),
+		user_id text not null references users(id),
 		login text not null,
 		password text not null,
 		metadata text
 	);
 	CREATE TABLE IF NOT EXISTS text_data (
 		id serial primary key,
-		user_id int not null references users(id),
+		user_id text not null references users(id),
 		"data" text not null,
 		metadata text
 	);
 	CREATE TABLE IF NOT EXISTS blob_data (
 		id serial primary key,
-		user_id int not null references users(id),
+		user_id text not null references users(id),
 		"data" bytea not null,
 		metadata text
 	);
 	CREATE TABLE IF NOT EXISTS card_data (
 		id serial primary key,
-		user_id int not null references users(id),
+		user_id text not null references users(id),
 		card_number text not null unique,
 		"month" text not null,
 		"year" text not null,

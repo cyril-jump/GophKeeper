@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	GetAllBlobData(ctx context.Context, userID int) ([]domain.BlobData, error)
+	GetAllBlobData(ctx context.Context, userID string) ([]domain.BlobData, error)
 }
 
-func (r *Repo) GetAllBlobDataDB(ctx context.Context, userID int) ([]domain.BlobData, error) {
+func (r *Repo) GetAllBlobDataDB(ctx context.Context, userID string) ([]domain.BlobData, error) {
 
 	return r.provider.GetAllBlobData(ctx, userID)
 }

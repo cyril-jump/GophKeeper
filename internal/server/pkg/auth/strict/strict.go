@@ -1,4 +1,4 @@
-package auth
+package strict
 
 import (
 	"context"
@@ -40,7 +40,7 @@ func (s *Strict) CreateToken(userID string) (string, error) {
 	return tokenString, nil
 }
 
-func (s *Strict) CheckToken(tokenString string) (string, bool, error) {
+func (s *Strict) CheckToken(tokenString string) (string, bool) {
 
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -50,9 +50,9 @@ func (s *Strict) CheckToken(tokenString string) (string, bool, error) {
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return fmt.Sprintf("%s", claims["user"]), ok, nil
+		return fmt.Sprintf("%s", claims["user"]), ok
 	}
-	return "", false, nil
+	return "", false
 }
 
 func (s *Strict) CreateCookie(c echo.Context, userID string) error {

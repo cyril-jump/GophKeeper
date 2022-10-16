@@ -13,7 +13,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	CreateNewCredDataDB(ctx context.Context, userID int, data domain.CredData) error
+	CreateNewCredDataDB(ctx context.Context, userID string, data domain.CredData) error
 }
 
 func New(repo Repo) *Usecase {
@@ -22,7 +22,7 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessCreateNewCredData(ctx context.Context, userID int, data domain.CredData) error {
+func (u *Usecase) ProcessCreateNewCredData(ctx context.Context, userID string, data domain.CredData) error {
 	log.Info("processing CreateNewCredData")
 
 	err := u.repo.CreateNewCredDataDB(ctx, userID, data)

@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	CreateNewCredData(ctx context.Context, userID int, data domain.CredData) error
+	CreateNewCredData(ctx context.Context, userID string, data domain.CredData) error
 }
 
-func (r *Repo) CreateNewCredDataDB(ctx context.Context, userID int, data domain.CredData) error {
+func (r *Repo) CreateNewCredDataDB(ctx context.Context, userID string, data domain.CredData) error {
 
 	return r.provider.CreateNewCredData(ctx, userID, data)
 }

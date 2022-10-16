@@ -12,13 +12,13 @@ import (
 )
 
 func (r *Provider) Create(ctx context.Context, user domain.User) error {
-	crUserStmt, err := r.db.PrepareContext(ctx, "INSERT INTO users (login, password) VALUES ($1, $2) RETURNING id;")
+	crUserStmt, err := r.db.PrepareContext(ctx, "INSERT INTO users (id, login, password) VALUES ($1, $2, $3) RETURNING id;")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
 	}
 	defer crUserStmt.Close()
 
-	if err := crUserStmt.QueryRowContext(ctx, user.Login, user.Password).Scan(&user.ID); err != nil {
+	if err := crUserStmt.QueryRowContext(ctx, user.ID, user.Login, user.Password).Scan(&user.ID); err != nil {
 		errCode := err.(*pq.Error).Code
 		if pgerrcode.IsIntegrityConstraintViolation(string(errCode)) {
 			return &domain.AlreadyExistsError{Err: domain.ErrUserAlreadyExists}

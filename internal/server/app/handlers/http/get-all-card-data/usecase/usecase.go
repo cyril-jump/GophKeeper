@@ -13,7 +13,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	GetAllBlobCardDB(ctx context.Context, userID int) ([]domain.CardData, error)
+	GetAllCardDataDB(ctx context.Context, userID string) ([]domain.CardData, error)
 }
 
 func New(repo Repo) *Usecase {
@@ -22,10 +22,10 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessGetAllCardData(ctx context.Context, userID int) ([]domain.CardData, error) {
+func (u *Usecase) ProcessGetAllCardData(ctx context.Context, userID string) ([]domain.CardData, error) {
 	log.Info("processing GetAllCardData")
 
-	data, err := u.repo.GetAllBlobCardDB(ctx, userID)
+	data, err := u.repo.GetAllCardDataDB(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

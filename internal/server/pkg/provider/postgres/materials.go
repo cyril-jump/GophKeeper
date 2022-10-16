@@ -8,7 +8,7 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
 )
 
-func (p *Provider) GetAllTextData(ctx context.Context, userID int) ([]domain.TextData, error) {
+func (p *Provider) GetAllTextData(ctx context.Context, userID string) ([]domain.TextData, error) {
 	getTextDataStmt, err := p.db.PrepareContext(ctx, "SELECT id,data,metadata FROM text_data WHERE user_id=$1;")
 	if err != nil {
 		return nil, &domain.StatementPSQLError{Err: err}
@@ -45,7 +45,7 @@ func (p *Provider) GetAllTextData(ctx context.Context, userID int) ([]domain.Tex
 	return allTextData, nil
 }
 
-func (p *Provider) UpdateTextDataByID(ctx context.Context, userID int, data domain.TextData) error {
+func (p *Provider) UpdateTextDataByID(ctx context.Context, userID string, data domain.TextData) error {
 	updateTextDataStmt, err := p.db.PrepareContext(ctx, "UPDATE text_data SET data = $1, metadata = $2 WHERE user_id = $3 and id = $4;")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -59,7 +59,7 @@ func (p *Provider) UpdateTextDataByID(ctx context.Context, userID int, data doma
 	return nil
 }
 
-func (p *Provider) CreateNewTextData(ctx context.Context, userID int, data domain.TextData) error {
+func (p *Provider) CreateNewTextData(ctx context.Context, userID string, data domain.TextData) error {
 	crUserStmt, err := p.db.PrepareContext(ctx, "INSERT INTO text_data (user_id, data, metadata) VALUES ($1, $2, $3);")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -73,7 +73,7 @@ func (p *Provider) CreateNewTextData(ctx context.Context, userID int, data domai
 	return nil
 }
 
-func (p *Provider) GetAllCredData(ctx context.Context, userID int) ([]domain.CredData, error) {
+func (p *Provider) GetAllCredData(ctx context.Context, userID string) ([]domain.CredData, error) {
 
 	getTextDataStmt, err := p.db.PrepareContext(ctx, "SELECT id,login, password, metadata FROM auth_data WHERE user_id=$1;")
 	if err != nil {
@@ -111,7 +111,7 @@ func (p *Provider) GetAllCredData(ctx context.Context, userID int) ([]domain.Cre
 	return allTextData, nil
 }
 
-func (p *Provider) UpdateCredDataByID(ctx context.Context, userID int, data domain.CredData) error {
+func (p *Provider) UpdateCredDataByID(ctx context.Context, userID string, data domain.CredData) error {
 	updateTextDataStmt, err := p.db.PrepareContext(ctx, "UPDATE auth_data SET login = $1, password = $2, metadata = $3 WHERE user_id = $4 and id = $5;")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -125,7 +125,7 @@ func (p *Provider) UpdateCredDataByID(ctx context.Context, userID int, data doma
 	return nil
 }
 
-func (r *Provider) CreateNewCredData(ctx context.Context, userID int, data domain.CredData) error {
+func (r *Provider) CreateNewCredData(ctx context.Context, userID string, data domain.CredData) error {
 	crUserStmt, err := r.db.PrepareContext(ctx, "INSERT INTO auth_data (user_id, login, password, metadata) VALUES ($1, $2, $3, $4);")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -139,7 +139,7 @@ func (r *Provider) CreateNewCredData(ctx context.Context, userID int, data domai
 	return nil
 }
 
-func (p *Provider) GetAllCardData(ctx context.Context, userID int) ([]domain.CardData, error) {
+func (p *Provider) GetAllCardData(ctx context.Context, userID string) ([]domain.CardData, error) {
 
 	getTextDataStmt, err := p.db.PrepareContext(ctx, "SELECT id,card_number, month, year, cvc, name, surname,metadata FROM card_data WHERE user_id=$1;")
 	if err != nil {
@@ -177,7 +177,7 @@ func (p *Provider) GetAllCardData(ctx context.Context, userID int) ([]domain.Car
 	return allTextData, nil
 }
 
-func (p *Provider) UpdateCardDataByID(ctx context.Context, userID int, data domain.CardData) error {
+func (p *Provider) UpdateCardDataByID(ctx context.Context, userID string, data domain.CardData) error {
 	updateTextDataStmt, err := p.db.PrepareContext(ctx, "UPDATE card_data SET card_number = $1, month = $2,year = $3, cvc = $4,name = $5, surname = $6, metadata = $7 WHERE user_id = $8 and id = $9;")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -191,7 +191,7 @@ func (p *Provider) UpdateCardDataByID(ctx context.Context, userID int, data doma
 	return nil
 }
 
-func (p *Provider) CreateNewCardData(ctx context.Context, userID int, data domain.CardData) error {
+func (p *Provider) CreateNewCardData(ctx context.Context, userID string, data domain.CardData) error {
 	crUserStmt, err := p.db.PrepareContext(ctx, "INSERT INTO card_data (user_id, card_number, month, year, cvc, name, surname, metadata) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -205,7 +205,7 @@ func (p *Provider) CreateNewCardData(ctx context.Context, userID int, data domai
 	return nil
 }
 
-func (p *Provider) GetAllBlobData(ctx context.Context, userID int) ([]domain.BlobData, error) {
+func (p *Provider) GetAllBlobData(ctx context.Context, userID string) ([]domain.BlobData, error) {
 	getTextDataStmt, err := p.db.PrepareContext(ctx, "SELECT id,data,metadata FROM blob_data WHERE user_id=$1;")
 	if err != nil {
 		return nil, &domain.StatementPSQLError{Err: err}
@@ -242,7 +242,7 @@ func (p *Provider) GetAllBlobData(ctx context.Context, userID int) ([]domain.Blo
 	return allTextData, nil
 }
 
-func (p *Provider) UpdateBlobDataByID(ctx context.Context, userID int, data domain.BlobData) error {
+func (p *Provider) UpdateBlobDataByID(ctx context.Context, userID string, data domain.BlobData) error {
 	updateTextDataStmt, err := p.db.PrepareContext(ctx, "UPDATE blob_data SET data = $1, metadata = $2 WHERE user_id = $3 and id = $4;")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}
@@ -256,7 +256,7 @@ func (p *Provider) UpdateBlobDataByID(ctx context.Context, userID int, data doma
 	return nil
 }
 
-func (p *Provider) CreateNewBlobData(ctx context.Context, userID int, data domain.BlobData) error {
+func (p *Provider) CreateNewBlobData(ctx context.Context, userID string, data domain.BlobData) error {
 	crUserStmt, err := p.db.PrepareContext(ctx, "INSERT INTO blob_data (user_id, data, metadata) VALUES ($1, $2, $3);")
 	if err != nil {
 		return &domain.StatementPSQLError{Err: err}

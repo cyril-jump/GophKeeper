@@ -1,19 +1,49 @@
 package requests
 
 import (
+	"context"
+	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
+	"github.com/cyril-jump/gophkeeper/internal/server/pkg/config"
 )
 
+type Usecase interface {
+	ProcessGetAllCardData(ctx context.Context, userID string) ([]domain.CardData, error)
+}
+
 type Requests struct {
+	ctx     context.Context
+	usecase Usecase
 }
 
-func New() *Requests {
-	return &Requests{}
+func New(ctx context.Context, usecase Usecase) *Requests {
+	return &Requests{
+		ctx:     ctx,
+		usecase: usecase,
+	}
 }
 
-func (h *Requests) GetAllCardDataDB(c echo.Context) error {
+func (r *Requests) GetAllCardData(c echo.Context) error {
 
-	return c.NoContent(http.StatusOK)
+	userID := ""
+
+	if id := c.Request().Context().Value(config.CookieKey); id != nil {
+		userID = id.(string)
+	}
+
+	dataArray, err := r.usecase.ProcessGetAllCardData(c.Request().Context(), userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, domain.ErrDataNotFound):
+			return c.NoContent(http.StatusNoContent)
+		default:
+			return c.NoContent(http.StatusInternalServerError)
+		}
+	}
+
+	return c.JSON(http.StatusOK, dataArray)
 }

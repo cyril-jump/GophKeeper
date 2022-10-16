@@ -13,7 +13,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	GetAllBlobDataDB(ctx context.Context, userID int) ([]domain.BlobData, error)
+	GetAllBlobDataDB(ctx context.Context, userID string) ([]domain.BlobData, error)
 }
 
 func New(repo Repo) *Usecase {
@@ -22,7 +22,7 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessGetAllBlobData(ctx context.Context, userID int) ([]domain.BlobData, error) {
+func (u *Usecase) ProcessGetAllBlobData(ctx context.Context, userID string) ([]domain.BlobData, error) {
 	log.Info("processing GetAllBlobData")
 
 	data, err := u.repo.GetAllBlobDataDB(ctx, userID)

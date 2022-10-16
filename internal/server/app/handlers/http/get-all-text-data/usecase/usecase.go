@@ -13,7 +13,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	CreateDB(ctx context.Context, user domain.User) error
+	GetAllTextDataDB(ctx context.Context, userID string) ([]domain.TextData, error)
 }
 
 func New(repo Repo) *Usecase {
@@ -22,13 +22,13 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessSingUp(ctx context.Context, user domain.User) error {
-	log.Info("processing SingUp")
+func (u *Usecase) ProcessGetAllTextData(ctx context.Context, userID string) ([]domain.TextData, error) {
+	log.Info("processing GetAllTextData")
 
-	err := u.repo.CreateDB(ctx, user)
+	data, err := u.repo.GetAllTextDataDB(ctx, userID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return data, nil
 }

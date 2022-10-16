@@ -13,7 +13,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	UpdateCardDataByIDDB(ctx context.Context, userID int, data domain.CardData) error
+	UpdateCardDataByIDDB(ctx context.Context, userID string, data domain.CardData) error
 }
 
 func New(repo Repo) *Usecase {
@@ -22,7 +22,7 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessUpdateCardDataByID(ctx context.Context, userID int, data domain.CardData) error {
+func (u *Usecase) ProcessUpdateCardDataByID(ctx context.Context, userID string, data domain.CardData) error {
 	log.Info("processing UpdateCardDataByID")
 
 	err := u.repo.UpdateCardDataByIDDB(ctx, userID, data)

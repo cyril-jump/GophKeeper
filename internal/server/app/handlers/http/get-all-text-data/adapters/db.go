@@ -17,10 +17,10 @@ func New(p Provider) *Repo {
 }
 
 type Provider interface {
-	GetAllTextData(ctx context.Context, userID int) ([]domain.TextData, error)
+	GetAllTextData(ctx context.Context, userID string) ([]domain.TextData, error)
 }
 
-func (r *Repo) GetAllTextDataDB(ctx context.Context, userID int) ([]domain.TextData, error) {
+func (r *Repo) GetAllTextDataDB(ctx context.Context, userID string) ([]domain.TextData, error) {
 
 	return r.provider.GetAllTextData(ctx, userID)
 }

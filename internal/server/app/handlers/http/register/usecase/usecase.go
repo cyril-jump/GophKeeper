@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/labstack/gommon/log"
 
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
@@ -13,7 +14,7 @@ type Usecase struct {
 }
 
 type Repo interface {
-	GetByCredentialsDB(ctx context.Context, login, password string) (domain.User, error)
+	CreateDB(ctx context.Context, user domain.User) error
 }
 
 func New(repo Repo) *Usecase {
@@ -22,13 +23,15 @@ func New(repo Repo) *Usecase {
 	}
 }
 
-func (u *Usecase) ProcessGetByCredentials(ctx context.Context, login, password string) (domain.User, error) {
-	log.Info("processing GetByCredentials")
+func (u *Usecase) ProcessCreate(ctx context.Context, user domain.User) (string, error) {
+	log.Info("processing Create")
 
-	user, err := u.repo.GetByCredentialsDB(ctx, login, password)
+	user.ID = uuid.New().String()
+
+	err := u.repo.CreateDB(ctx, user)
 	if err != nil {
-		return domain.User{}, err
+		return "", err
 	}
 
-	return user, nil
+	return user.ID, nil
 }
