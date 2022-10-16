@@ -21,6 +21,8 @@ var (
 	ErrDataNotFound = errors.New("data was not found")
 )
 
+var ErrInternal = errors.New("internal error")
+
 type (
 	NotFoundError struct {
 		Err error

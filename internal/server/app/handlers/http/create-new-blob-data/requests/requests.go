@@ -53,13 +53,12 @@ func (r *Requests) CreateNewBlobData(c echo.Context) error {
 	inp.Data = buf.Bytes()
 	inp.Metadata = c.FormValue("metadata")
 	if err := c.Bind(&inp); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	err = r.usecase.ProcessCreateNewBlobData(c.Request().Context(), userID, inp)
-
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	return c.NoContent(http.StatusOK)
