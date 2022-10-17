@@ -33,6 +33,7 @@ type ServerInterface interface {
 	Register(c echo.Context) error
 }
 
+// EchoRouter interface
 type EchoRouter interface {
 	CONNECT(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
 	DELETE(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route

@@ -6,10 +6,12 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+// Provider struct
 type Provider struct {
 	db *sql.DB
 }
 
+// New Provider constuctor
 func New(databaseDSN string) *Provider {
 	db, err := sql.Open("postgres", databaseDSN)
 	if err != nil {
@@ -26,10 +28,12 @@ func New(databaseDSN string) *Provider {
 	return &Provider{db: db}
 }
 
+// Close method of Provider struct
 func (p *Provider) Close() error {
 	return p.db.Close()
 }
 
+// createTable SQL
 func createTable(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS users (
 		id text primary key,

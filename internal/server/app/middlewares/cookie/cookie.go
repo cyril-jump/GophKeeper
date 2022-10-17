@@ -10,16 +10,19 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/config"
 )
 
+// Cookie middleware struct
 type Cookie struct {
 	auth auth.Strict
 }
 
+// New Cookie middleware constructor
 func New(auth auth.Strict) *Cookie {
 	return &Cookie{
 		auth: auth,
 	}
 }
 
+// SessionWithCookies method of Cookie struct
 func (ck *Cookie) SessionWithCookies(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var userID string

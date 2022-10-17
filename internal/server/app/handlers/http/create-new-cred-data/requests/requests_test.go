@@ -17,8 +17,8 @@ import (
 
 	"github.com/cyril-jump/gophkeeper/internal/mocks"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/adapters"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/usecase"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-cred-data/adapters"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-cred-data/usecase"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/middlewares/cookie"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/auth/strict"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/config"
@@ -63,18 +63,14 @@ func TestSuite(t *testing.T) {
 	suite.Run(t, new(Suite))
 }
 
-func (suite *Suite) Test_CreateNewCardData_200() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+func (suite *Suite) Test_CreateNewCredData_200() {
+	suite.e.POST("/", suite.reqs.CreateNewCredData)
+	suite.db.EXPECT().CreateNewCredData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+	data := domain.CredData{
+		ID:       0,
+		Login:    "111",
+		Password: "222",
+		Metadata: "333",
 	}
 
 	reqBody, _ := json.Marshal(data)
@@ -91,19 +87,15 @@ func (suite *Suite) Test_CreateNewCardData_200() {
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_401() {
+func (suite *Suite) Test_CreateNewCredData_401() {
 	suite.e.Use(suite.mw.SessionWithCookies)
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+	suite.e.POST("/", suite.reqs.CreateNewCredData)
+	suite.db.EXPECT().CreateNewCredData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+	data := domain.CredData{
+		ID:       0,
+		Login:    "111",
+		Password: "222",
+		Metadata: "333",
 	}
 
 	reqBody, _ := json.Marshal(data)
@@ -120,18 +112,14 @@ func (suite *Suite) Test_CreateNewCardData_401() {
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_500() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+func (suite *Suite) Test_CreateNewCredData_500() {
+	suite.e.POST("/", suite.reqs.CreateNewCredData)
+	suite.db.EXPECT().CreateNewCredData(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
+	data := domain.CredData{
+		ID:       0,
+		Login:    "111",
+		Password: "222",
+		Metadata: "333",
 	}
 
 	reqBody, _ := json.Marshal(data)

@@ -6,6 +6,7 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
 )
 
+// Provider interface
 type Provider interface {
 	GetAllTextData(ctx context.Context, userID string) ([]domain.TextData, error)
 	UpdateTextDataByID(ctx context.Context, userID string, data domain.TextData) error

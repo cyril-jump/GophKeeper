@@ -17,8 +17,8 @@ import (
 
 	"github.com/cyril-jump/gophkeeper/internal/mocks"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/adapters"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/usecase"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-text-data-by-id/adapters"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-text-data-by-id/usecase"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/middlewares/cookie"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/auth/strict"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/config"
@@ -63,84 +63,93 @@ func TestSuite(t *testing.T) {
 	suite.Run(t, new(Suite))
 }
 
-func (suite *Suite) Test_CreateNewCardData_200() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+func (suite *Suite) Test_UpdateTextDataByID_200() {
+	suite.e.PUT("/", suite.reqs.UpdateTextDataByID)
+	suite.db.EXPECT().UpdateTextDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
+	data := domain.TextData{
+		ID:       0,
+		Text:     "111",
+		Metadata: "222",
 	}
 
 	reqBody, _ := json.Marshal(data)
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
 
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusOK, res.StatusCode())
 
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_401() {
+func (suite *Suite) Test_UpdateTextDataByID_400() {
+	suite.e.PUT("/", suite.reqs.UpdateTextDataByID)
+	suite.db.EXPECT().UpdateTextDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
+	data := ""
+
+	reqBody, _ := json.Marshal(data)
+	payload := strings.NewReader(string(reqBody))
+
+	client := resty.New()
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
+
+	if err != nil {
+		log.Fatal("Could not create GET request")
+	}
+	assert.Equal(suite.T(), http.StatusBadRequest, res.StatusCode())
+
+	defer suite.testSrv.Close()
+}
+
+func (suite *Suite) Test_UpdateTextDataByID_401() {
 	suite.e.Use(suite.mw.SessionWithCookies)
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+	suite.e.PUT("/", suite.reqs.UpdateTextDataByID)
+	suite.db.EXPECT().UpdateCredDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
+	data := domain.TextData{
+		ID:       0,
+		Text:     "111",
+		Metadata: "222",
 	}
 
 	reqBody, _ := json.Marshal(data)
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
 
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusUnauthorized, res.StatusCode())
 
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_500() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
-	data := domain.CardData{
-		ID:         0,
-		CardNumber: "111",
-		Month:      "222",
-		Year:       "333",
-		CVC:        "444",
-		Name:       "555",
-		Surname:    "666",
-		Metadata:   "777",
+func (suite *Suite) Test_UpdateTextDataByID_500() {
+	suite.e.PUT("/", suite.reqs.UpdateTextDataByID)
+	suite.db.EXPECT().UpdateTextDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
+
+	data := domain.TextData{
+		ID:       0,
+		Text:     "111",
+		Metadata: "222",
 	}
 
 	reqBody, _ := json.Marshal(data)
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
+
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusInternalServerError, res.StatusCode())
 

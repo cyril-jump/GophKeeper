@@ -17,8 +17,8 @@ import (
 
 	"github.com/cyril-jump/gophkeeper/internal/mocks"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/adapters"
-	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/create-new-card-data/usecase"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-card-data-by-id/adapters"
+	"github.com/cyril-jump/gophkeeper/internal/server/app/handlers/http/update-card-data-by-id/usecase"
 	"github.com/cyril-jump/gophkeeper/internal/server/app/middlewares/cookie"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/auth/strict"
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/config"
@@ -63,9 +63,10 @@ func TestSuite(t *testing.T) {
 	suite.Run(t, new(Suite))
 }
 
-func (suite *Suite) Test_CreateNewCardData_200() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+func (suite *Suite) Test_UpdateCardDataByID_200() {
+	suite.e.PUT("/", suite.reqs.UpdateCardDataByID)
+	suite.db.EXPECT().UpdateCardDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
 	data := domain.CardData{
 		ID:         0,
 		CardNumber: "111",
@@ -81,20 +82,41 @@ func (suite *Suite) Test_CreateNewCardData_200() {
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
 
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusOK, res.StatusCode())
 
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_401() {
+func (suite *Suite) Test_UpdateCardDataByID_400() {
+	suite.e.PUT("/", suite.reqs.UpdateCardDataByID)
+	suite.db.EXPECT().UpdateCardDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
+	data := ""
+
+	reqBody, _ := json.Marshal(data)
+	payload := strings.NewReader(string(reqBody))
+
+	client := resty.New()
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
+
+	if err != nil {
+		log.Fatal("Could not create GET request")
+	}
+	assert.Equal(suite.T(), http.StatusBadRequest, res.StatusCode())
+
+	defer suite.testSrv.Close()
+}
+
+func (suite *Suite) Test_UpdateCardDataByID_401() {
 	suite.e.Use(suite.mw.SessionWithCookies)
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+	suite.e.PUT("/", suite.reqs.UpdateCardDataByID)
+	suite.db.EXPECT().UpdateCardDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+
 	data := domain.CardData{
 		ID:         0,
 		CardNumber: "111",
@@ -110,19 +132,20 @@ func (suite *Suite) Test_CreateNewCardData_401() {
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
 
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusUnauthorized, res.StatusCode())
 
 	defer suite.testSrv.Close()
 }
 
-func (suite *Suite) Test_CreateNewCardData_500() {
-	suite.e.POST("/", suite.reqs.CreateNewCardData)
-	suite.db.EXPECT().CreateNewCardData(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
+func (suite *Suite) Test_UpdateCardDataByID_500() {
+	suite.e.PUT("/", suite.reqs.UpdateCardDataByID)
+	suite.db.EXPECT().UpdateCardDataByID(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.ErrInternal)
+
 	data := domain.CardData{
 		ID:         0,
 		CardNumber: "111",
@@ -138,9 +161,10 @@ func (suite *Suite) Test_CreateNewCardData_500() {
 	payload := strings.NewReader(string(reqBody))
 
 	client := resty.New()
-	res, err := client.R().SetBody(payload).Post(suite.testSrv.URL)
+	res, err := client.R().SetBody(payload).Put(suite.testSrv.URL)
+
 	if err != nil {
-		log.Fatal("Could not create POST request")
+		log.Fatal("Could not create GET request")
 	}
 	assert.Equal(suite.T(), http.StatusInternalServerError, res.StatusCode())
 

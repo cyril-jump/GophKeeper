@@ -34,12 +34,14 @@ func New(ctx context.Context) *Strict {
 	}
 }
 
+// CreateToken method of Strict
 func (s *Strict) CreateToken(userID string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{"user": userID})
 	tokenString, _ := token.SignedString(s.randNum)
 	return tokenString, nil
 }
 
+// CheckToken method of Strict
 func (s *Strict) CheckToken(tokenString string) (string, bool) {
 
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -55,6 +57,7 @@ func (s *Strict) CheckToken(tokenString string) (string, bool) {
 	return "", false
 }
 
+// CreateCookie method of Strict
 func (s *Strict) CreateCookie(c echo.Context, userID string) error {
 	var err error
 	cookie := new(http.Cookie)

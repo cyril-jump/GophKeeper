@@ -11,6 +11,7 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
 )
 
+// Create method of Provider struct
 func (r *Provider) Create(ctx context.Context, user domain.User) error {
 	crUserStmt, err := r.db.PrepareContext(ctx, "INSERT INTO users (id, login, password) VALUES ($1, $2, $3) RETURNING id;")
 	if err != nil {
@@ -29,6 +30,7 @@ func (r *Provider) Create(ctx context.Context, user domain.User) error {
 	return nil
 }
 
+// GetByCredentials method of Provider struct
 func (r *Provider) GetByCredentials(ctx context.Context, login, password string) (domain.User, error) {
 	user := domain.User{}
 

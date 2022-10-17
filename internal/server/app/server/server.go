@@ -25,6 +25,7 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/pkg/provider"
 )
 
+// Init http-server
 func Init(ctx context.Context, provider provider.Provider, auth auth.Strict) *echo.Echo {
 
 	cookieMW := cookie.New(auth)
