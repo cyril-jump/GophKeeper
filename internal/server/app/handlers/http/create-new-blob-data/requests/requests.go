@@ -1,9 +1,7 @@
 package requests
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -36,27 +34,12 @@ func (r *Requests) CreateNewBlobData(c echo.Context) error {
 		userID = id.(string)
 	}
 
-	file, err := c.FormFile("data")
-	if err != nil {
-		return err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, src); err != nil {
-		return err
-	}
-
 	var inp domain.BlobData
-	inp.Data = buf.Bytes()
-	inp.Metadata = c.FormValue("metadata")
 	if err := c.Bind(&inp); err != nil {
-		return c.NoContent(http.StatusInternalServerError)
+		return c.NoContent(http.StatusBadRequest)
 	}
 
-	err = r.usecase.ProcessCreateNewBlobData(c.Request().Context(), userID, inp)
+	err := r.usecase.ProcessCreateNewBlobData(c.Request().Context(), userID, inp)
 	if err != nil {
 		return c.NoContent(http.StatusInternalServerError)
 	}

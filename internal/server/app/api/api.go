@@ -218,7 +218,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.POST(baseURL+"/api/login", wrapper.Login)
-	router.POST(baseURL+"/api/register", wrapper.Register)
+	router.POST(baseURL+"/api/user/login", wrapper.Login)
+	router.POST(baseURL+"/api/user/register", wrapper.Register)
 
 }
