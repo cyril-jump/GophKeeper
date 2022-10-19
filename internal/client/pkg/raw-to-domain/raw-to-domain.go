@@ -5,6 +5,7 @@ import (
 	"github.com/cyril-jump/gophkeeper/internal/server/app/domain"
 )
 
+// RawBlobToDomainBlob func
 func RawBlobToDomainBlob(data raw.BlobData) *domain.BlobData {
 
 	return &domain.BlobData{

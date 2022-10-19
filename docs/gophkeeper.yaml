@@ -69,7 +69,7 @@ paths:
               $ref: '#/components/schemas/BlobData'
       responses:
         '200':
-          description: The Blob data has already been uploaded by this user
+          description: The Blob data has been uploaded by this user
         '400':
           description: Invalid request format
         '401':
@@ -90,6 +90,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BlobData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
     put:
       security:
         - cookieAuth: [ ]
@@ -103,7 +109,7 @@ paths:
               $ref: '#/components/schemas/BlobData'
       responses:
         '200':
-          description: The Blob data has already been updated by this user
+          description: The Blob data has been updated by this user
         '400':
           description: Invalid request format
         '401':
@@ -124,7 +130,7 @@ paths:
               $ref: '#/components/schemas/CardData'
       responses:
         '200':
-          description: The Card data has already been uploaded by this user
+          description: The Card data has been uploaded by this user
         '400':
           description: Invalid request format
         '401':
@@ -145,6 +151,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CardData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
     put:
       security:
         - cookieAuth: [ ]
@@ -158,7 +170,7 @@ paths:
               $ref: '#/components/schemas/CardData'
       responses:
         '200':
-          description: The Blob data has already been updated by this user
+          description: The Blob data has been updated by this user
         '400':
           description: Invalid request format
         '401':
@@ -179,7 +191,7 @@ paths:
               $ref: '#/components/schemas/CredData'
       responses:
         '200':
-          description: The Card data has already been uploaded by this user
+          description: The Card data has been uploaded by this user
         '400':
           description: Invalid request format
         '401':
@@ -200,6 +212,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CredData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
     put:
       security:
         - cookieAuth: [ ]
@@ -213,7 +231,7 @@ paths:
               $ref: '#/components/schemas/CredData'
       responses:
         '200':
-          description: The Cred data has already been updated by this user
+          description: The Cred data has been updated by this user
         '400':
           description: Invalid request format
         '401':
@@ -234,7 +252,7 @@ paths:
               $ref: '#/components/schemas/TextData'
       responses:
         '200':
-          description: The Text data has already been uploaded by this user
+          description: The Text data has been uploaded by this user
         '400':
           description: Invalid request format
         '401':
@@ -274,7 +292,7 @@ paths:
               $ref: '#/components/schemas/TextData'
       responses:
         '200':
-          description: The Text data has already been updated by this user
+          description: The Text data has been updated by this user
         '400':
           description: Invalid request format
         '401':

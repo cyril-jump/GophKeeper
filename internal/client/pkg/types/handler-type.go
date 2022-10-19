@@ -1,5 +1,6 @@
-package handlertype
+package types
 
+// HandlerType string
 type HandlerType string
 
 const (
@@ -21,3 +22,7 @@ const (
 	Login    HandlerType = "login"
 	Register HandlerType = "register"
 )
+
+func (c HandlerType) String() string {
+	return string(c)
+}

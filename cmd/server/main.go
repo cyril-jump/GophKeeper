@@ -17,6 +17,8 @@ import (
 
 func main() {
 
+	printAssemblyData()
+
 	ctx, cancel := context.WithCancel(context.Background())
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
