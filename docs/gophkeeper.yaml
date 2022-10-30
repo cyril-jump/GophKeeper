@@ -1,0 +1,392 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Gophkeeper
+  description: A sample API that uses a gophkeeper in the OpenAPI 3.0 specification
+  contact:
+    name: Cyril Agafonov
+    email: cyriljupm@gmail.com
+  license:
+    name: Horns and Hooves Company 2.0
+servers:
+  - url: https://gophkeeper.io/
+paths:
+  /api/user/register:
+    post:
+      summary: User registration
+      operationId: Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: The user is successfully registered and authenticated
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '400':
+          description: Invalid request format
+        '409':
+          description:  Login is already occupied
+        '500':
+          description:  Internal server error
+  /api/user/login:
+    post:
+      description: User authentication
+      operationId: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: The user is successfully authenticated
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        '400':
+          description: Invalid request format
+        '500':
+          description: Internal server error
+  /api/materials/blob:
+    post:
+      security:
+        - cookieAuth: [ ]
+      description: Load blob data
+      operationId: CreateNewBlobData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlobData'
+      responses:
+        '200':
+          description: The Blob data has been uploaded by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+    get:
+      security:
+        - cookieAuth: [ ]
+      description: Getting a list of loaded blob data
+      operationId: GetAllBlobData
+      responses:
+        '200':
+          description: Successful processing of the request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlobData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
+    put:
+      security:
+        - cookieAuth: [ ]
+      description: Update blob data
+      operationId: UpdateBlodDataByID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlobData'
+      responses:
+        '200':
+          description: The Blob data has been updated by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+  /api/materials/card:
+    post:
+      security:
+        - cookieAuth: [ ]
+      description: Load card data
+      operationId: CreateNewCardData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardData'
+      responses:
+        '200':
+          description: The Card data has been uploaded by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+    get:
+      security:
+        - cookieAuth: [ ]
+      description: Getting a list of loaded card data
+      operationId: GetAllCardData
+      responses:
+        '200':
+          description: Successful processing of the request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CardData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
+    put:
+      security:
+        - cookieAuth: [ ]
+      description: Update card data
+      operationId: UpdateCardDataByID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardData'
+      responses:
+        '200':
+          description: The Blob data has been updated by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+  /api/materials/cred:
+    post:
+      security:
+        - cookieAuth: [ ]
+      description: Load cred data
+      operationId: CreateNewBlobData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredData'
+      responses:
+        '200':
+          description: The Card data has been uploaded by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+    get:
+      security:
+        - cookieAuth: [ ]
+      description: Getting a list of loaded cred data
+      operationId: GetAllCredData
+      responses:
+        '200':
+          description: Successful processing of the request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CredData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
+    put:
+      security:
+        - cookieAuth: [ ]
+      description: Update cred data
+      operationId: UpdateCredDataByID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredData'
+      responses:
+        '200':
+          description: The Cred data has been updated by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+  /api/materials/text:
+    post:
+      security:
+        - cookieAuth: [ ]
+      description: Load text data
+      operationId: CreateNewTextData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextData'
+      responses:
+        '200':
+          description: The Text data has been uploaded by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+    get:
+      security:
+        - cookieAuth: [ ]
+      description: Getting a list of loaded text data
+      operationId: GetAllTextData
+      responses:
+        '200':
+          description: Successful processing of the request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TextData'
+        '204':
+          description: No response data
+        '401':
+          description: The user is not authorized
+        '500':
+          description: Internal server error
+    put:
+      security:
+        - cookieAuth: [ ]
+      description: Update text data
+      operationId: UpdateTextDataByID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextData'
+      responses:
+        '200':
+          description: The Text data has been updated by this user
+        '400':
+          description: Invalid request format
+        '401':
+          description: User not authenticated
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - login
+        - password
+      properties:
+        id:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+    TextData:
+      type: object
+      required:
+        - id
+        - text
+        - metadata
+      properties:
+        id:
+          type: number
+        text:
+          type: string
+        metadata:
+          type: string
+    CredData:
+      type: object
+      required:
+        - id
+        - login
+        - password
+        - metadata
+      properties:
+        id:
+          type: number
+        login:
+          type: string
+        password:
+          type: string
+        metadata:
+          type: string
+    CardData:
+      type: object
+      required:
+        - id
+        - card_number
+        - month
+        - year
+        - cvc
+        - name
+        - surname
+        - metadata
+      properties:
+        id:
+          type: number
+        card_number:
+          type: string
+        month:
+          type: string
+        year:
+          type: string
+        cvc:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        metadata:
+          type: string
+    BlobData:
+      type: object
+      required:
+        - id
+        - data
+        - metadata
+      properties:
+        id:
+          type: number
+        data:
+          type: string
+          format: byte
+        metadata:
+          type: string
